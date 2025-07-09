@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>日本の生活(仮)</title>
+<style>
+  body { font-family: sans-serif; background: #FFEFD5; text-align: center; padding: 10px 5px; }
+  .category-btn, #next, #restart {
+    padding: 14px 28px;
+    font-size: 1.3em;
+    margin: 10px auto;
+    width: 90vw;
+    max-width: 300px;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    white-space: pre-line;
+    display: block;
+    box-sizing: border-box;
+  }
+  body.darken-background {
+    background-color: #2b2b2b !important;
+    background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 5px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 5px);
+  color: white !important;
+}
+
+  .choice {
+    display: block;
+    margin: 8px auto;
+    padding: 14px 16px;
+    font-size: 1.2em;
+    max-width: 90vw;
+    background-color: #ADD8E6;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    white-space: pre-wrap;
+    text-align: left;
+    word-break: break-word;
+    box-sizing: border-box;
+    text-indent: 0;
+  }
+  .choice.disabled:hover,
+  .choice.disabled:active {
+    background-color: #ADD8E6 !important;
+  }
+
+  .chosen { background-color: #87b4cc; }
+  .disabled { pointer-events: none; }
+  .mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    font-weight: bold;
+    color: red;
+    user-select: none;
+    pointer-events: none;
+  }
+  .speaker-icon {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #444;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    user-select: none;
+    pointer-events: auto;
+  }
+  .explanation {
+    margin-top: 20px;
+    white-space: pre-wrap;
+    color: #444;
+    text-align: left;
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #timer { font-size: 1.1em; margin-top: 10px; }
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  .sakura {
+    position: fixed;
+    top: -50px;
+    font-size: 24px;
+    pointer-events: none;
+    color: pink;
+    animation: fall linear 12s;
+    z-index: 9999;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<h1>日本の生活(仮)</h1>
+<div id="start-buttons"></div>
+<div id="container"></div>
+<div id="timer">時間: 0秒</div>
+
+<script>
+// JSONデータはここにPythonから差し込みます
+let audioPlaying = null;
+const allQuestions = {questions_json};
+const audioData = {audio_json};
+
+let currentCategory = null;
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let startTime = null;
+let timerInterval = null;
+let answered = false;
+
+function createButton(text, onClick) {
+  const btn = document.createElement('button');
+  btn.textContent = text;
+  btn.className = 'category-btn';
+  btn.onclick = onClick;
+  return btn;
+}
+
+function showCategories() {
+  document.body.classList.remove('darken-background');
+  const container = document.getElementById('start-buttons');
+  container.style.display = 'block';
+  container.innerHTML = '';
+  for (const category in allQuestions) {
+    const btn = createButton(category, () => startQuiz(category));
+    container.appendChild(btn);
+  }
+  document.getElementById('container').innerHTML = '';
+  document.getElementById('timer').textContent = '時間: 0秒';
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('timer').textContent = '時間: ' + elapsed + '秒';
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function startQuiz(category) {
+  currentCategory = category;
+  questions = allQuestions[category];
+  currentIndex = 0;
+  score = 0;
+  document.getElementById('start-buttons').style.display = 'none';
+  showQuestion();
+  startTimer();
+}
+
+function showQuestion() {
+  answered = false;
+  if (audioPlaying) {
+    audioPlaying.pause();
+    audioPlaying.currentTime = 0;
+    audioPlaying = null;
+  }
+  
+  answered = false;
+  const q = questions[currentIndex];
+  const container = document.getElementById('container');
+  container.innerHTML = '';
+
+  const qElem = document.createElement('div');
+  const highlighted = q.question
+    .replace(/（正答\dつ）/g, m => `<span style="color:red;">${m}</span>`)
+    .replace(/[（(]คำตอบที่ถูกต้อง\dข้อ[)）]/g, m => `<span style="color:red;">${m}</span>`);
+  qElem.innerHTML = highlighted;
+  qElem.style.whiteSpace = 'pre-wrap';
+  qElem.style.fontWeight = 'bold';
+  qElem.style.fontSize = '1.2em';
+  qElem.style.textAlign = 'left';
+  container.appendChild(qElem);
+
+   let selectedChoices = [];
+
+  q.choices.forEach(choice => {
+    const choiceDiv = document.createElement('div');
+    choiceDiv.className = 'choice';
+    choiceDiv.textContent = choice;
+    choiceDiv.style.textAlign = 'left';
+
+    choiceDiv.onclick = () => {
+      if (answered) return;  // 判定済みならクリック無効
+
+      const alreadySelected = selectedChoices.includes(choice);
+
+      if (alreadySelected) {
+        selectedChoices = selectedChoices.filter(c => c !== choice);
+        choiceDiv.classList.remove('chosen');
+      } else {
+        selectedChoices.push(choice);
+        choiceDiv.classList.add('chosen');
+      }
+
+      if (selectedChoices.length === q.correct.length) {
+        answered = true;   // 正誤判定フラグを立てる
+        container.classList.add('disabled');  // 必要に応じて
+
+    container.querySelectorAll('.choice').forEach(choiceDiv => {
+       choiceDiv.style.cursor = 'default';  // 選択肢はポインタ解除
+     });
+
+     container.querySelectorAll('.speaker-icon').forEach(speaker => {
+       speaker.style.cursor = 'pointer'; 
+     });
+        let isAllCorrect = true;
+
+        selectedChoices.forEach(sel => {
+          const choiceElement = Array.from(container.getElementsByClassName('choice'))
+            .find(div => div.textContent === sel);
+
+          if (!choiceElement) return;
+
+          const isCorrect = q.correct.includes(sel);
+          if (!isCorrect) isAllCorrect = false;
+
+          markChoice(choiceElement, isCorrect);
+
+      if (isCorrect) {
+        const correctIndex = q.correct.indexOf(sel) + 1;
+        const numberStr = String(q.number).padStart(2, '0');
+        const audioFileName = `${q.categoryNo}-${numberStr}-${correctIndex}.mp3`;
+        const audioSrc = audioData[audioFileName];
+        if (audioSrc) {
+          const speaker = document.createElement('span');
+          speaker.className = 'speaker-icon';
+          speaker.innerHTML = '🔊';
+          speaker.onclick = e => {
+            e.stopPropagation();
+            if (audioPlaying) {
+              audioPlaying.pause();
+              audioPlaying.currentTime = 0;
+            }
+            const audio = new Audio(audioSrc);
+            audio.playbackRate = 1.3;
+            audio.play();
+            audioPlaying = audio;
+            audio.onended = () => {
+              audioPlaying = null;
+            };
+          };
+          choiceElement.appendChild(speaker);
+        }
+      }
+    });
+
+    // 正解だが未選択の選択肢にも色とスピーカーを表示
+    q.correct.forEach(correctAns => {
+          if (!selectedChoices.includes(correctAns)) {
+            const choiceElement = Array.from(container.getElementsByClassName('choice'))
+              .find(div => div.textContent === correctAns);
+            if (choiceElement) {
+              choiceElement.style.backgroundColor = '#ffccff';
+          const correctIndex = q.correct.indexOf(correctAns) + 1;
+          const numberStr = String(q.number).padStart(2, '0');
+          const audioFileName = `${q.categoryNo}-${numberStr}-${correctIndex}.mp3`;
+          const audioSrc = audioData[audioFileName];
+          if (audioSrc) {
+            const speaker = document.createElement('span');
+            speaker.className = 'speaker-icon';
+            speaker.innerHTML = '🔊';
+            speaker.onclick = e => {
+              e.stopPropagation();
+              if (audioPlaying) {
+                audioPlaying.pause();
+                audioPlaying.currentTime = 0;
+              }
+              const audio = new Audio(audioSrc);
+              audio.playbackRate = 1.3;
+              audio.play();
+              audioPlaying = audio;
+              audio.onended = () => {
+                audioPlaying = null;
+              };
+            };
+            choiceElement.appendChild(speaker);
+          }
+        }
+      }
+    });
+
+    // スコア加算
+    if (isAllCorrect) {
+      score++;
+    }
+
+    showExplanation();
+  }
+};
+
+
+    container.appendChild(choiceDiv);
+  });
+}
+
+function markChoice(choiceDiv, isCorrect) {
+  const mark = document.createElement('span');
+  mark.className = 'mark';
+  mark.textContent = isCorrect ? '〇' : '×';
+  choiceDiv.appendChild(mark);
+}
+
+function showExplanation() {
+  const container = document.getElementById('container');
+  const q = questions[currentIndex];
+
+  // 解説表示
+  const explanationDiv = document.createElement('div');
+  explanationDiv.className = 'explanation';
+  explanationDiv.textContent = q.explanation || '解説はありません。';
+  container.appendChild(explanationDiv);
+
+  const existingNextBtn = container.querySelector('.next-btn');
+  if (existingNextBtn) {
+    existingNextBtn.remove();
+  }
+  const nextBtn = createButton('次へ', () => {
+    currentIndex++;
+    if (currentIndex < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  });
+  nextBtn.classList.add('next-btn'); 
+  container.appendChild(nextBtn);
+
+  // ここで .disabled クラスを外す
+  container.classList.remove('disabled');
+}
+
+function showResult() {
+  stopTimer();
+  document.body.classList.add('darken-background');
+  const container = document.getElementById('container');
+  container.innerHTML = '';
+
+  const percent = Math.round((score / questions.length) * 100);
+  const resultText = document.createElement('div');
+  resultText.style.fontWeight = 'bold';
+  resultText.style.fontSize = '1.3em';
+  resultText.textContent = '正答率: ' + percent + '% (' + score + ' / ' + questions.length + ')';
+  container.appendChild(resultText);
+
+if (percent <= 50) {
+  document.body.classList.add('darken-background');
+} else {
+  document.body.classList.remove('darken-background');
+}
+
+
+  if (percent >= 90) {
+    // 桜が降り続けるアニメーションを開始
+    const sakuraInterval = setInterval(() => {
+      const sakura = document.createElement('div');
+      sakura.className = 'sakura';
+      sakura.textContent = '🌸';
+      sakura.style.left = Math.random() * 100 + 'vw';
+      sakura.style.animationDuration = (8 + Math.random() * 8) + 's';
+      sakura.style.fontSize = (16 + Math.random() * 24) + 'px';
+      document.body.appendChild(sakura);
+    }, 800);
+
+    // 桜を削除・インターバル解除関数
+    const removeSakura = () => {
+      document.querySelectorAll('.sakura').forEach(el => el.remove());
+      clearInterval(sakuraInterval);
+    };
+
+    const restartBtn = createButton('さいしょにもどる', () => {
+      removeSakura();
+      showCategories();
+    });
+    container.appendChild(restartBtn);
+  } else {
+    const restartBtn = createButton('もういっかい', showCategories);
+    container.appendChild(restartBtn);
+  }
+}
+
+window.onload = function() {
+  showCategories();
+};
+</script>
+
+</body>
+</html>
