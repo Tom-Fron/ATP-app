@@ -1,0 +1,37 @@
+Netlify設定
+
+Netlify,GitHub,Googleすべて以下のメアドとPASS
+
+名前：Tom Fron
+メアド：toms77747@gmail.com
+PASS：pokadasagon2525
+
+アップロードが必要なファイル3点
+index.html
+manifest.json
+sw
+
+更新手順
+エクセルに問題文、選択肢、解説、音声読み上げ文を追加し保存
+create_tts.pyをcmdで実行し、音声ファイルを作成する
+quiz_make.pyをcmdで実行し、index.htmlファイルを更新する
+py¥audioフォルダのmp3をpy¥netlify\audioにコピーする
+index.html、questions.jsonをNetlifyにアップロードする
+　→画面左のTomsを選択し、画面中央下のアップロードスペースにフォルダごとアップロードする
+
+URLをLINEで送る
+
+☆注意事項
+URLをクリックするとオンラインなら使用可能
+オフラインで使用した場合は、ブラウザ（IPHONEはSAFARI）から開く
+3点ボタンからホーム画面に追加を選択する
+アプリをダウンロードしてオフラインで使用する際、キャッシュを削除したら動作しなくなる可能性あり→そのときは再度URLからダウンロードする必要あり
+
+
+
+以下、BASE64埋め込み方式の方法（別ファイル方式に変更したので使わない）
+エクセルに問題文、選択肢、解説、音声読み上げ文を追加し保存
+create_tts.pyをcmdで実行し、音声ファイルを作成する
+quiz_make.pyをcmdで実行し、htmlファイルを更新する
+上記のアップロードが必要なファイル3点をNetlifyにアップロードする
+　→画面左のTomsを選択し、画面中央下のアップロードスペースにファイル3点をアップロードする
