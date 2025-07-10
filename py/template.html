@@ -169,7 +169,7 @@ body {
 let audioPlaying = null;
 let allQuestions = {};
 
-fetch("questions.json")
+fetch("./questions.json")
   .then(res => res.json())
   .then(data => {
     allQuestions = data;
@@ -499,7 +499,7 @@ window.onload = function() {
   showCategories();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
+    navigator.serviceWorker.register('./sw.js')
       .then(() => console.log('Service Worker registered'))
       .catch(err => console.error('Service Worker registration failed:', err));
   }
