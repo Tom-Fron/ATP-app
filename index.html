@@ -169,7 +169,7 @@ body {
 let audioPlaying = null;
 let allQuestions = {};
 
-fetch("questions.json")
+fetch("./questions.json")
   .then(res => res.json())
   .then(data => {
     allQuestions = data;
@@ -458,6 +458,8 @@ function showResult() {
 const resultText = document.createElement('div');
 resultText.style.fontWeight = 'bold';
 resultText.style.fontSize = '1.3em';
+resultText.style.marginTop = '20px'; 
+resultText.style.marginBottom = '20px'; 
 resultText.textContent = `正答数 ${score} / ${questions.length}問（${percent}%）`;
 container.appendChild(resultText);
 
@@ -499,7 +501,7 @@ window.onload = function() {
   showCategories();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
+    navigator.serviceWorker.register('./sw.js')
       .then(() => console.log('Service Worker registered'))
       .catch(err => console.error('Service Worker registration failed:', err));
   }
