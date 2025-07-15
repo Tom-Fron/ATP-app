@@ -423,10 +423,11 @@ function showExplanation() {
   const container = document.getElementById('container');
   const q = questions[currentIndex];
 
-  // 解説表示
+  // 解説表示（解説がある場合のみ表示）
+if (q.explanation && q.explanation.trim() !== '') {
   const explanationDiv = document.createElement('div');
   explanationDiv.className = 'explanation';
-  explanationDiv.textContent = q.explanation || '解説はありません。';
+  explanationDiv.textContent = q.explanation;
   container.appendChild(explanationDiv);
 
   const existingNextBtn = container.querySelector('.next-btn');
