@@ -165,6 +165,12 @@ body {
 <div id="container"></div>
 
 <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
+}
+
 // JSONデータはここにPythonから差し込みます
 let audioPlaying = null;
 let allQuestions = {};
