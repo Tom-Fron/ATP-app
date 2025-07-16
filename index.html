@@ -326,6 +326,7 @@ for (const category in allQuestions) {
 }
 
 function startQuiz(category) {
+  document.getElementById('read-terms').style.display = 'none';
   currentCategory = category;
   document.getElementById('read-terms').style.display = 'none';
   questions = [...allQuestions[category]].sort(() => Math.random() - 0.5);
