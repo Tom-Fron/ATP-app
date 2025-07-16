@@ -169,9 +169,9 @@ body {
 </div>
 <div id="category-buttons"></div>
 <div id="terms-container" style="display:none; background:white; margin: 20px auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); white-space: pre-wrap;">
-  <div id="terms-ja" style="margin-bottom: 20px; text-align: left;"></div>
+  <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
   <hr>
-  <div id="terms-th" style="margin-top: 20px; text-align: left;"></div>
+  <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
 
   <!--「とじる」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
@@ -548,13 +548,13 @@ container.appendChild(restartBtn);
 
             if (isSubList) {
               return `
-                <div style="display: flex; margin: 0; line-height: 1.2;">
-                  <span style="min-width: 2em;">${isSubList[1]}</span>
+                <div style="display: flex; margin: 0; padding: 0; line-height: 1.2;">
+                  <span style="min-width: 2em; margin: 0; padding: 0;">${isSubList[1]}</span>
                   <span style="flex: 1;">${isSubList[2]}</span>
                 </div>`;
             } else if (isNote) {
               return `
-                <div style="display: flex; margin: 0; line-height: 1.2;">
+                <div style="display: flex; margin: 0; padding: 0; line-height: 1.2;">
                   <span style="min-width: 1.5em;">${isNote[1]}</span>
                   <span style="flex: 1;">${isNote[2]}</span>
                 </div>`;
