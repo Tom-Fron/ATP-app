@@ -620,31 +620,28 @@ container.appendChild(restartBtn);
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
 
-    const formatLine = (line) => {
-  const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトルなど
-  const isSubList = /^([0-9]+）)(.+)/.exec(line);   // 1）本文
-  const isNote = /^(※)(.+)/.exec(line);            // ※注意
+ const formatLine = (line) => {
+  const isHeading = /^[0-9]+[.．]/.test(line);            // 1.タイトルなど
+  const isSubList = /^([0-9]+）)(.+)/.exec(line);          // 1）本文
+  const isNote = /^(※)(.+)/.exec(line);                   // ※注意
 
   if (isSubList) {
     return `
-    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
-      <span style="min-width: 2em; padding-left: 1em;">${isSubList[1]}</span>
-      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isSubList[2]}</span>
-    </div>`;
-} else if (isNote) {
-  return `
-    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
-      <span style="min-width: 1.5em; padding-left: 1em;">${isNote[1]}</span>
-      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isNote[2]}</span>
-    </div>`;
-} else if (isHeading) {
-  return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em; overflow-wrap: break-word; word-break: break-word;">${line}</p>`;
-} else {
-  return `
-    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
-      <span style="min-width: 1.5em;"></span>
-      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${line}</span>
-    </div>`;
+      <p class="hang-indent">
+        <span class="number" style="padding-left: 1em;">${isSubList[1]}</span><span class="text">${isSubList[2]}</span>
+      </p>`;
+  } else if (isNote) {
+    return `
+      <p class="hang-indent">
+        <span class="number" style="padding-left: 1em;">${isNote[1]}</span><span class="text">${isNote[2]}</span>
+      </p>`;
+  } else if (isHeading) {
+    return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em;">${line}</p>`;
+  } else {
+    return `
+      <p class="hang-indent">
+        <span class="number" style="padding-left: 1em;"></span><span class="text">${line}</span>
+      </p>`;
   }
 };
 
