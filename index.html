@@ -186,6 +186,13 @@ body {
   padding-right: 12px;
   box-sizing: border-box;
 }
+p.paragraph-indent {
+  margin: 0.4em 0;
+  text-indent: 1em;   /* ← 段落の1文字下げ */
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
 </style>
 </head>
 <body>
@@ -200,7 +207,18 @@ body {
 </span>
 </div>
 <div id="category-buttons"></div>
-<div id="terms-container" style="display:none; background:white; margin: 20px auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); white-space: pre-wrap;">
+<div id="terms-container"
+  style="
+    display: none;
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    overflow-wrap: break-word;">
   <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
   <hr>
   <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
@@ -573,21 +591,27 @@ container.appendChild(restartBtn);
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
 
-     const formatLine = (line) => {
-  const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトル
+    const formatLine = (line) => {
+  const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトルなど
   const isSubList = /^([0-9]+）)(.+)/.exec(line);   // 1）本文
   const isNote = /^(※)(.+)/.exec(line);            // ※注意
 
-  const style = "margin:0; padding:0; line-height:1.3; text-indent: -2.5em; padding-left: 2.5em;";
-
   if (isSubList) {
-    return `<div style="${style}">${isSubList[1]}${isSubList[2]}</div>`;
+    return `
+      <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+        <span style="min-width: 2.5em; padding-left: 1em;">${isSubList[1]}</span>
+        <span style="flex: 1; text-indent: 0;">${isSubList[2]}</span>
+      </div>`;
   } else if (isNote) {
-    return `<div style="${style}">${isNote[1]}${isNote[2]}</div>`;
+    return `
+      <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+        <span style="min-width: 2em; padding-left: 1em;">${isNote[1]}</span>
+        <span style="flex: 1;">${isNote[2]}</span>
+      </div>`;
   } else if (isHeading) {
-    return `<p class="hang-indent" style="font-weight:bold; ${style}">${line}</p>`;
+    return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em;">${line}</p>`;
   } else {
-    return `<p class="hang-indent" style="${style}">${line}</p>`;
+    return `<p class="paragraph-indent">${line}</p>`;
   }
 };
 
