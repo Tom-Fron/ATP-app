@@ -537,19 +537,26 @@ container.appendChild(restartBtn);
 fetch('terms.json')
   .then(response => response.json())
   .then(data => {
-    // カテゴリボタンなどの要素があれば非表示に
     if (categoryButtons) categoryButtons.style.display = 'none';
     readTerms.style.display = 'none';
     document.getElementById('terms-container').style.display = 'block';
 
-    // ja 配列の各行を<p>タグに整形して表示
+    // 段落ごとに処理（ja）
     document.getElementById('terms-ja').innerHTML = data.ja
-      .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
+      .map(line => {
+        const isList = /^[0-9]+）/.test(line); // 1）2）にマッチ
+        const indent = isList ? '3em' : '2em'; // 1文字分深く
+        return `<p style="text-indent: ${indent}; padding-left: ${indent}; margin: 0 0 0.8em 0;">${line}</p>`;
+      })
       .join('');
 
-    // th 配列も同様に
+    // 同様に（th）
     document.getElementById('terms-th').innerHTML = data.th
-      .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
+      .map(line => {
+        const isList = /^[0-9]+）/.test(line);
+        const indent = isList ? '3em' : '2em';
+        return `<p style="text-indent: ${indent}; padding-left: ${indent}; margin: 0 0 0.8em 0;">${line}</p>`;
+      })
       .join('');
       });
   });
