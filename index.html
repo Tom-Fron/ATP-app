@@ -162,11 +162,12 @@ body {
 <h1 id="main-title">日本の生活(仮)</h1>
 </div>
 <div id="start-buttons"></div>
-<div style="text-align:center; margin: 10px;">
-  <button id="read-terms" style="font-size: 0.9em; padding: 8px 14px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">
+<div style="text-align:center; margin-top: 10px;">
+  <span id="read-terms" style="cursor:pointer; font-size: 0.9em; color: #000;">
     はじめに読んでください<br>กรุณาอ่านก่อนใช้งาน
-  </button>
+  </span>
 </div>
+<div id="category-buttons"></div>
 <div id="terms-container" style="display:none; background:white; margin: 20px auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); white-space: pre-wrap;">
   <div id="terms-ja" style="margin-bottom: 20px;"></div>
   <hr>
@@ -531,13 +532,14 @@ container.appendChild(restartBtn);
 
   const readTerms = document.getElementById('read-terms');
   const backButton = document.getElementById('back-button');
+  const categoryButtons = document.getElementById('category-buttons');
 
   if (readTerms) {
     readTerms.addEventListener('click', () => {
       fetch('terms.json')
         .then(response => response.json())
         .then(data => {
-          document.getElementById('category-buttons').style.display = 'none';
+          if (categoryButtons) categoryButtons.style.display = 'none';
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
           document.getElementById('terms-ja').textContent = data.ja;
