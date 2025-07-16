@@ -162,6 +162,19 @@ body {
 <h1 id="main-title">日本の生活(仮)</h1>
 </div>
 <div id="start-buttons"></div>
+
+<div id="terms-container" style="display:none; background:white; margin: 20px auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); white-space: pre-wrap;">
+  <div id="terms-ja" style="margin-bottom: 20px;"></div>
+  <hr>
+  <div id="terms-th" style="margin-top: 20px;"></div>
+
+  <!-- 小さな「もどる」ボタン -->
+  <div style="text-align: center; margin-top: 30px;">
+    <button id="back-button" style="font-size: 0.8em; padding: 6px 12px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      もどる
+    </button>
+  </div>
+</div>
 <div id="container"></div>
 
 <script>
@@ -513,6 +526,23 @@ window.onload = function() {
       .catch(err => console.error('Service Worker registration failed:', err));
   }
 };
+document.getElementById('read-terms').addEventListener('click', () => {
+  fetch('terms.json')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('category-buttons').style.display = 'none';
+      document.getElementById('read-terms').style.display = 'none';
+      document.getElementById('terms-container').style.display = 'block';
+      document.getElementById('terms-ja').textContent = data.ja;
+      document.getElementById('terms-th').textContent = data.th;
+    });
+});
+
+document.getElementById('back-button').addEventListener('click', () => {
+  document.getElementById('terms-container').style.display = 'none';
+  document.getElementById('category-buttons').style.display = 'block';
+  document.getElementById('read-terms').style.display = 'block';
+});
 </script>
 
 <footer id="footer" style="text-align:center; padding:10px; font-size:0.8em; color:#666;">
