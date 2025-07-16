@@ -562,22 +562,20 @@ container.appendChild(restartBtn);
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
 
-         const formatLine = (line) => {
+       const formatLine = (line) => {
   const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトル
   const isSubList = /^([0-9]+）)(.+)/.exec(line);   // 1）本文
   const isNote = /^(※)(.+)/.exec(line);            // ※注意
 
   if (isSubList) {
     return `
-      <div style="display: flex; margin: 0; padding: 0; line-height: 1.2;">
-        <span style="min-width: 2em; margin: 0; padding: 0;">${isSubList[1]}</span>
-        <span style="flex: 1;">${isSubList[2]}</span>
+      <div style="text-indent: -1.5em; padding-left: 1.5em; margin: 0; line-height: 1.5;">
+        ${isSubList[1]}${isSubList[2]}
       </div>`;
   } else if (isNote) {
     return `
-      <div style="display: flex; margin: 0; padding: 0; line-height: 1.2;">
-        <span style="min-width: 1.5em;">${isNote[1]}</span>
-        <span style="flex: 1;">${isNote[2]}</span>
+      <div style="text-indent: -1.5em; padding-left: 1.5em; margin: 0; line-height: 1.5;">
+        ${isNote[1]}${isNote[2]}
       </div>`;
   } else if (isHeading) {
     return `<p class="hang-indent" style="font-weight: bold;">${line}</p>`;
