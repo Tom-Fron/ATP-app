@@ -321,12 +321,13 @@ for (const category in allQuestions) {
   const btn = createButton(btnText, () => startQuiz(category));
   container.appendChild(btn);
 }
-
+  document.getElementById('read-terms').style.display = 'block';
   document.getElementById('container').innerHTML = '';
 }
 
 function startQuiz(category) {
   currentCategory = category;
+  document.getElementById('read-terms').style.display = 'none';
   questions = [...allQuestions[category]].sort(() => Math.random() - 0.5);
   currentIndex = 0;
   score = 0;
