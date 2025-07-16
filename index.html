@@ -181,6 +181,7 @@ body {
   margin-bottom: 0;         /* 下も詰める */
   text-align: center;       /* 中央寄せ */
 }
+/* 大項目（番号とテキストはflex横並び） */
 #terms-ja div, #terms-th div {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -193,23 +194,35 @@ body {
   word-break: break-word;
 }
 
+/* 大項目の番号とテキストのspanは今のまま */
 #terms-ja div span, #terms-th div span {
   margin: 0 !important;
   padding: 0 !important;
   line-height: 1.4 !important;
   white-space: normal !important;
-  /* ここで左側に余白をつけて、丸括弧番号全体を右にずらす */
-  margin-left: 1em !important;  /* ← 1文字分右にずらす */
-  min-width: 2em;               /* 番号の横幅を確保（任意） */
-  flex-shrink: 0;               /* 横幅固定で縮小しない */
 }
 
+/* 小項目pタグ全体を大項目より右にずらす */
 #terms-ja p.hang-indent, #terms-th p.hang-indent {
-  text-indent: 0;
-  padding-left: 1.5em;
-  line-height: 1.5;
   margin: 0;
+  padding: 0;
+  line-height: 1.5;
   white-space: normal;
+  margin-left: 1.5em;       /* 小項目を大項目より右に */
+  text-indent: 0;           /* 先頭字下げはしない */
+  display: block;
+}
+
+/* 小項目の番号部分をinline-blockで幅固定にして揃える */
+#terms-ja p.hang-indent::before,
+#terms-th p.hang-indent::before {
+  content: attr(data-num);  /* data-num属性で番号を指定する想定 */
+  display: inline-block;
+  width: 1.5em;              /* 番号の幅（大項目のインデントと合わせる） */
+  margin-left: -1.5em;       /* 小項目全体の左マージンと合わせて左に出す */
+  text-align: right;         /* 番号は右寄せ */
+  padding-right: 0.3em;      /* 番号と本文の隙間 */
+  font-weight: normal;
 }
 </style>
 </head>
