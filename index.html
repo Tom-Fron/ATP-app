@@ -181,22 +181,35 @@ body {
   margin-bottom: 0;         /* 下も詰める */
   text-align: center;       /* 中央寄せ */
 }
-#terms-ja div, #terms-th div, 
-#terms-ja p, #terms-th p {
+#terms-ja div, #terms-th div {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+#terms-ja div span, #terms-th div span {
   margin: 0 !important;
   padding: 0 !important;
-  line-height: 1.3 !important;
+  line-height: 1.4 !important;
+  white-space: normal !important;
+  /* ここで左側に余白をつけて、丸括弧番号全体を右にずらす */
+  margin-left: 1em !important;  /* ← 1文字分右にずらす */
+  min-width: 2em;               /* 番号の横幅を確保（任意） */
+  flex-shrink: 0;               /* 横幅固定で縮小しない */
 }
-#terms-ja, #terms-th {
-  padding-left: 12px;
-  padding-right: 12px;
-  box-sizing: border-box;
-}
-p.paragraph-indent {
-  margin: 0.4em 
-  line-height: 1.6;
+
+#terms-ja p.hang-indent, #terms-th p.hang-indent {
+  text-indent: 0;
+  padding-left: 1.5em;
+  line-height: 1.5;
+  margin: 0;
   white-space: normal;
-  overflow-wrap: break-word;
 }
 </style>
 </head>
