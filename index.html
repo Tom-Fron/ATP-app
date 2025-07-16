@@ -187,8 +187,7 @@ body {
   box-sizing: border-box;
 }
 p.paragraph-indent {
-  margin: 0.4em 0;
-  text-indent: 1em;   /* ← 段落の1文字下げ */
+  margin: 0.4em 
   line-height: 1.6;
   white-space: normal;
   overflow-wrap: break-word;
@@ -213,12 +212,15 @@ p.paragraph-indent {
     background: white;
     margin: 20px auto;
     padding: 20px;
-    width: 90%;
+    width: 90vw;             /* 幅をviewportの90％に */
     max-width: 600px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     box-sizing: border-box;
-    overflow-wrap: break-word;">
+    overflow-wrap: break-word;
+    overflow-x: hidden;      /* 横スクロール防止 */
+    word-break: break-word;  /* 長文の折返し対応 */
+  ">
   <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
   <hr>
   <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
@@ -598,20 +600,24 @@ container.appendChild(restartBtn);
 
   if (isSubList) {
     return `
-      <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
-        <span style="min-width: 2.5em; padding-left: 1em;">${isSubList[1]}</span>
-        <span style="flex: 1; text-indent: 0;">${isSubList[2]}</span>
-      </div>`;
-  } else if (isNote) {
-    return `
-      <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+      <span style="min-width: 2em; padding-left: 1em;">${isSubList[1]}</span>
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isSubList[2]}</span>
+    </div>`;
+} else if (isNote) {
+  return `
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+      <span style="min-width: 1.5em; padding-left: 1em;">${isNote[1]}</span>
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isNote[2]}</span>
+    </div>`;
+} else if (isHeading) {
+  return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em; overflow-wrap: break-word; word-break: break-word;">${line}</p>`;
+} else {
+  return `
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
       <span style="min-width: 1.5em;"></span>
-      <span style="flex: 1;">${line}</span>
-      </div>`;
-  } else if (isHeading) {
-    return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em;">${line}</p>`;
-  } else {
-    return `<p class="paragraph-indent">${line}</p>`;
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${line}</span>
+    </div>`;
   }
 };
 
