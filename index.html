@@ -533,45 +533,46 @@ container.appendChild(restartBtn);
   const categoryButtons = document.getElementById('category-buttons');
 
   if (readTerms) {
-  readTerms.addEventListener('click', () => {
-fetch('terms.json')
-  .then(response => response.json())
-  .then(data => {
-    if (categoryButtons) categoryButtons.style.display = 'none';
-    readTerms.style.display = 'none';
-    document.getElementById('terms-container').style.display = 'block';
+    readTerms.addEventListener('click', () => {
+      fetch('terms.json')
+        .then(response => response.json())
+        .then(data => {
+          if (categoryButtons) categoryButtons.style.display = 'none';
+          readTerms.style.display = 'none';
+          document.getElementById('terms-container').style.display = 'block';
 
-    const formatLine = (line) => {
-      const isHeading = /^[0-9]+[.．]/.test(line);             // 1.タイトル
-      const isSubList = /^([0-9]+）)(.+)/.exec(line);           // 1）本文
-      const isNote = /^(※)(.+)/.exec(line);                    // ※注意
+          const formatLine = (line) => {
+            const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトル
+            const isSubList = /^([0-9]+）)(.+)/.exec(line);   // 1）本文
+            const isNote = /^(※)(.+)/.exec(line);            // ※注意
 
-      if (isSubList) {
-        return `
-          <div style="display: flex; margin: 0 0 0.6em 0; line-height: 1.5;">
-            <span style="min-width: 2em;">${isSubList[1]}</span>
-            <span style="flex: 1;">${isSubList[2]}</span>
-          </div>`;
-      } else if (isNote) {
-        return `
-          <div style="display: flex; margin: 0 0 0.6em 0; line-height: 1.5;">
-            <span style="min-width: 1.5em;">${isNote[1]}</span>
-            <span style="flex: 1;">${isNote[2]}</span>
-          </div>`;
-      } else if (isHeading) {
-        return `<p style="margin: 0 0 0.6em 0; font-weight: bold; line-height: 1.5;">${line}</p>`;
-      } else {
-        return `<p style="text-indent: 1em; margin: 0 0 0.6em 0; line-height: 1.5;">${line}</p>`;
-      }
-    };
+            if (isSubList) {
+              return `
+                <div style="display: flex; margin: 0 0 0.6em 0; line-height: 1.5;">
+                  <span style="min-width: 2em;">${isSubList[1]}</span>
+                  <span style="flex: 1;">${isSubList[2]}</span>
+                </div>`;
+            } else if (isNote) {
+              return `
+                <div style="display: flex; margin: 0 0 0.6em 0; line-height: 1.5;">
+                  <span style="min-width: 1.5em;">${isNote[1]}</span>
+                  <span style="flex: 1;">${isNote[2]}</span>
+                </div>`;
+            } else if (isHeading) {
+              return `<p style="margin: 0 0 0.6em 0; font-weight: bold; line-height: 1.5;">${line}</p>`;
+            } else {
+              return `<p style="text-indent: 1em; margin: 0 0 0.6em 0; line-height: 1.5;">${line}</p>`;
+            }
+          };
 
-    // 日本語表示
-    document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
+          // 日本語表示
+          document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
 
-    // タイ語表示
-    document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
-  });
-}); 
+          // タイ語表示
+          document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
+        });
+    });
+  }
 
   if (backButton) {
     backButton.addEventListener('click', () => {
@@ -581,6 +582,7 @@ fetch('terms.json')
     });
   }
 });
+
 </script>
 
 <footer id="footer" style="text-align:center; padding:10px; font-size:0.8em; color:#666;">
