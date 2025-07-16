@@ -542,10 +542,13 @@ container.appendChild(restartBtn);
         document.getElementById('terms-container').style.display = 'block';
 
         // 配列の各要素を<p>で囲み、インデントを付けてHTMLで挿入
-     document.getElementById('terms-ja').innerHTML = data.ja
+    document.getElementById('terms-ja').innerHTML = data.ja
+  .split('\n')
   .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
   .join('');
+
 document.getElementById('terms-th').innerHTML = data.th
+  .split('\n')
   .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
   .join('');
       });
