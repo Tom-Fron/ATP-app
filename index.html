@@ -36,6 +36,12 @@ position: relative;  }
   line-height: 1.2 !important;
   display: block !important; /* flexの影響を除去 */
 }
+#terms-ja p.hang-indent, #terms-th p.hang-indent {
+  text-indent: -1.5em;   /* 1行目の段落記号を左へずらす */
+  padding-left: 1.5em;   /* 段落全体の左余白 */
+  line-height: 1.5;      /* 行間 */
+  margin: 0;             /* 余白をリセット */
+}
 
 #terms-ja div span, #terms-th div span {
   margin: 0 !important;
@@ -575,9 +581,9 @@ container.appendChild(restartBtn);
     <span>${isNote[2]}</span>
                 </div>`;
             } else if (isHeading) {
-              return `<p style="margin: 0 0 0.6em 0; font-weight: bold; line-height: 1.5;">${line}</p>`;
-            } else {
-              return `<p style="text-indent: 1em; margin: 0 0 0.6em 0; line-height: 1.5;">${line}</p>`;
+              return `<p class="hang-indent" style="font-weight: bold;">${line}</p>`;
+} else {
+  return `<p class="hang-indent">${line}</p>`;
             }
           };
 
