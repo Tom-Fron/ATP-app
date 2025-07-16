@@ -599,21 +599,31 @@ container.appendChild(restartBtn);
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
 
-  const formatLine = (line) => {
+    const formatLine = (line) => {
   const isHeading = /^[0-9]+[.．]/.test(line);     // 1.タイトルなど
   const isSubList = /^([0-9]+）)(.+)/.exec(line);   // 1）本文
   const isNote = /^(※)(.+)/.exec(line);            // ※注意
 
   if (isSubList) {
     return `
-    <div><span>${isSubList[1]}</span><span>${isSubList[2]}</span></div>`;
-  } else if (isNote) {
-    return `
-    <div><span>${isNote[1]}</span><span>${isNote[2]}</span></div>`;
-  } else if (isHeading) {
-    return `<p class="hang-indent" style="font-weight: bold;">${line}</p>`;
-  } else {
-    return `<p class="hang-indent">${line}</p>`;
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+      <span style="min-width: 2em; padding-left: 1em;">${isSubList[1]}</span>
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isSubList[2]}</span>
+    </div>`;
+} else if (isNote) {
+  return `
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+      <span style="min-width: 1.5em; padding-left: 1em;">${isNote[1]}</span>
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${isNote[2]}</span>
+    </div>`;
+} else if (isHeading) {
+  return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em; overflow-wrap: break-word; word-break: break-word;">${line}</p>`;
+} else {
+  return `
+    <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
+      <span style="min-width: 1.5em;"></span>
+      <span style="flex: 1; overflow-wrap: break-word; word-break: break-word;">${line}</span>
+    </div>`;
   }
 };
 
