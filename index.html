@@ -175,8 +175,7 @@ body {
 
   <!--「とじる」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
-  <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">とじる
-    </button>
+  <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">とじる</button>
   </div>
 </div>
 <div id="container"></div>
@@ -543,12 +542,12 @@ container.appendChild(restartBtn);
         document.getElementById('terms-container').style.display = 'block';
 
         // 配列の各要素を<p>で囲み、インデントを付けてHTMLで挿入
-        document.getElementById('terms-ja').innerHTML = data.ja
-          .map(line => `<p style="text-indent: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
-          .join('');
-        document.getElementById('terms-th').innerHTML = data.th
-          .map(line => `<p style="text-indent: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
-          .join('');
+     document.getElementById('terms-ja').innerHTML = data.ja
+  .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
+  .join('');
+document.getElementById('terms-th').innerHTML = data.th
+  .map(line => `<p style="text-indent: 2em; padding-left: 1em; margin: 0 0 0.8em 0;">${line}</p>`)
+  .join('');
       });
   });
 }
