@@ -571,7 +571,6 @@ fetch('terms.json')
     // タイ語表示
     document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
   });
-}
 
   if (backButton) {
     backButton.addEventListener('click', () => {
