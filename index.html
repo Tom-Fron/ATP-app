@@ -181,50 +181,34 @@ body {
   margin-bottom: 0;         /* 下も詰める */
   text-align: center;       /* 中央寄せ */
 }
-/* 大項目（番号とテキストはflex横並び） */
 #terms-ja div, #terms-th div {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  line-height: 1.4 !important;
   display: flex !important;
   align-items: flex-start !important;
+  line-height: 1.4 !important;
+  margin: 0;
+  padding: 0;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
-/* 大項目の番号とテキストのspanは今のまま */
-#terms-ja div span, #terms-th div span {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.4 !important;
-  white-space: normal !important;
-}
-
-/* 小項目pタグ全体を大項目より右にずらす */
+/* 小項目番号あり段落 */
 #terms-ja p.hang-indent, #terms-th p.hang-indent {
+  display: block !important;
   margin: 0;
-  padding: 0;
+  padding-left: 1.5em;   /* 1.より右に1文字分ずらす */
+  text-indent: -1.5em;   /* 番号幅だけ左に戻す */
   line-height: 1.5;
   white-space: normal;
-  margin-left: 1.5em;       /* 小項目を大項目より右に */
-  text-indent: 0;           /* 先頭字下げはしない */
-  display: block;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-/* 小項目の番号部分をinline-blockで幅固定にして揃える */
-#terms-ja p.hang-indent::before,
-#terms-th p.hang-indent::before {
-  content: attr(data-num);  /* data-num属性で番号を指定する想定 */
-  display: inline-block;
-  width: 1.5em;              /* 番号の幅（大項目のインデントと合わせる） */
-  margin-left: -1.5em;       /* 小項目全体の左マージンと合わせて左に出す */
-  text-align: right;         /* 番号は右寄せ */
-  padding-right: 0.3em;      /* 番号と本文の隙間 */
-  font-weight: normal;
-}
-</style>
+/* 小項目番号のspan（番号部分）の余白削除 */
+#terms-ja p.hang-indent span.number, #terms-th p.hang-indent span.number {
+  white-space: nowrap;  /* 番号と本文の間の空白消す */
+  margin-right: 0;
+  padding-right: 0;
+}</style>
 </head>
 <body>
 <div id="header">
