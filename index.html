@@ -327,8 +327,9 @@ for (const category in allQuestions) {
 
 function startQuiz(category) {
   document.getElementById('read-terms').style.display = 'none';
+  document.getElementById('terms-container').style.display = 'none';  // ← 追加してください
+
   currentCategory = category;
-  document.getElementById('read-terms').style.display = 'none';
   questions = [...allQuestions[category]].sort(() => Math.random() - 0.5);
   currentIndex = 0;
   score = 0;
