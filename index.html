@@ -162,7 +162,11 @@ body {
 <h1 id="main-title">日本の生活(仮)</h1>
 </div>
 <div id="start-buttons"></div>
-
+<div style="text-align:center; margin: 10px;">
+  <button id="read-terms" style="font-size: 0.9em; padding: 8px 14px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    はじめに読んでください<br>กรุณาอ่านก่อนใช้งาน
+  </button>
+</div>
 <div id="terms-container" style="display:none; background:white; margin: 20px auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); white-space: pre-wrap;">
   <div id="terms-ja" style="margin-bottom: 20px;"></div>
   <hr>
@@ -512,36 +516,43 @@ const restartBtn = createButton('もういちど', () => {
     document.querySelectorAll('.sakura').forEach(el => el.remove());
     clearInterval(sakuraInterval);
   }
-  showCategories();
 });
 restartBtn.style.width = '200px';
 container.appendChild(restartBtn);
 }
-window.onload = function() {
-  showCategories();
 
+ document.addEventListener('DOMContentLoaded', () => {
+  showCategories();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then(() => console.log('Service Worker registered'))
       .catch(err => console.error('Service Worker registration failed:', err));
   }
-};
-document.getElementById('read-terms').addEventListener('click', () => {
-  fetch('terms.json')
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('category-buttons').style.display = 'none';
-      document.getElementById('read-terms').style.display = 'none';
-      document.getElementById('terms-container').style.display = 'block';
-      document.getElementById('terms-ja').textContent = data.ja;
-      document.getElementById('terms-th').textContent = data.th;
-    });
-});
 
-document.getElementById('back-button').addEventListener('click', () => {
-  document.getElementById('terms-container').style.display = 'none';
-  document.getElementById('category-buttons').style.display = 'block';
-  document.getElementById('read-terms').style.display = 'block';
+  const readTerms = document.getElementById('read-terms');
+  const backButton = document.getElementById('back-button');
+
+  if (readTerms) {
+    readTerms.addEventListener('click', () => {
+      fetch('terms.json')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('category-buttons').style.display = 'none';
+          readTerms.style.display = 'none';
+          document.getElementById('terms-container').style.display = 'block';
+          document.getElementById('terms-ja').textContent = data.ja;
+          document.getElementById('terms-th').textContent = data.th;
+        });
+    });
+  }
+
+  if (backButton) {
+    backButton.addEventListener('click', () => {
+      document.getElementById('terms-container').style.display = 'none';
+      document.getElementById('category-buttons').style.display = 'block';
+      readTerms.style.display = 'block';
+    });
+  }
 });
 </script>
 
