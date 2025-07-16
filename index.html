@@ -541,21 +541,33 @@ fetch('terms.json')
     readTerms.style.display = 'none';
     document.getElementById('terms-container').style.display = 'block';
 
-    // 段落ごとに処理（ja）
+    // 日本語（terms-ja）
     document.getElementById('terms-ja').innerHTML = data.ja
       .map(line => {
-        const isList = /^[0-9]+）/.test(line); // 1）2）にマッチ
-        const indent = isList ? '3em' : '2em'; // 1文字分深く
-        return `<p style="text-indent: ${indent}; padding-left: ${indent}; margin: 0 0 0.8em 0;">${line}</p>`;
+        const isSubList = /^[0-9]+）/.test(line); // 1）形式
+        const isHeading = /^[0-9]+[.．]/.test(line); // 1. or 1．形式
+        let styles = 'margin: 0 0 0.8em 0;';
+        if (isSubList) {
+          styles += ' text-indent: 2em; padding-left: 2em;';
+        } else if (!isHeading) {
+          styles += ' text-indent: 1em; padding-left: 1em;';
+        }
+        return `<p style="${styles}">${line}</p>`;
       })
       .join('');
 
-    // 同様に（th）
+    // タイ語（terms-th）も同様に
     document.getElementById('terms-th').innerHTML = data.th
       .map(line => {
-        const isList = /^[0-9]+）/.test(line);
-        const indent = isList ? '3em' : '2em';
-        return `<p style="text-indent: ${indent}; padding-left: ${indent}; margin: 0 0 0.8em 0;">${line}</p>`;
+        const isSubList = /^[0-9]+）/.test(line);
+        const isHeading = /^[0-9]+[.．]/.test(line);
+        let styles = 'margin: 0 0 0.8em 0;';
+        if (isSubList) {
+          styles += ' text-indent: 2em; padding-left: 2em;';
+        } else if (!isHeading) {
+          styles += ' text-indent: 1em; padding-left: 1em;';
+        }
+        return `<p style="${styles}">${line}</p>`;
       })
       .join('');
       });
