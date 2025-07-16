@@ -181,34 +181,45 @@ body {
   margin-bottom: 0;         /* 下も詰める */
   text-align: center;       /* 中央寄せ */
 }
+/* 大項目はflexのまま左寄せ固定（変更なし） */
 #terms-ja div, #terms-th div {
   display: flex !important;
   align-items: flex-start !important;
   line-height: 1.4 !important;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
-/* 小項目番号あり段落 */
+/* 小項目番号＋本文全体 */
 #terms-ja p.hang-indent, #terms-th p.hang-indent {
-  display: block !important;
+  display: flex;               /* flexで番号と本文横並び */
   margin: 0;
-  padding-left: 1.5em;   /* 1.より右に1文字分ずらす */
-  text-indent: -1.5em;   /* 番号幅だけ左に戻す */
+  padding-left: 1.5em;        /* 全体を「1.」より右に1文字分ずらす */
   line-height: 1.5;
   white-space: normal;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
-/* 小項目番号のspan（番号部分）の余白削除 */
+/* 番号部分 */
 #terms-ja p.hang-indent span.number, #terms-th p.hang-indent span.number {
-  white-space: nowrap;  /* 番号と本文の間の空白消す */
-  margin-right: 0;
-  padding-right: 0;
-}</style>
+  flex-shrink: 0;              /* 番号を縮めない */
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;         /* 番号と本文の間の空白を消す */
+  /* 番号はpadding-leftなし、本文で1.5emずらすので相対的に右寄せされる */
+}
+
+/* 本文部分 */
+#terms-ja p.hang-indent span.text, #terms-th p.hang-indent span.text {
+  margin-left: 0;              /* 番号とくっつける */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+</style>
 </head>
 <body>
 <div id="header">
