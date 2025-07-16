@@ -605,8 +605,8 @@ container.appendChild(restartBtn);
   } else if (isNote) {
     return `
       <div style="display: flex; margin: 0; padding: 0; line-height: 1.6;">
-        <span style="min-width: 2em; padding-left: 1em;">${isNote[1]}</span>
-        <span style="flex: 1;">${isNote[2]}</span>
+      <span style="min-width: 1.5em;"></span>
+      <span style="flex: 1;">${line}</span>
       </div>`;
   } else if (isHeading) {
     return `<p class="hang-indent" style="font-weight: bold; margin-top: 1em;">${line}</p>`;
