@@ -36,17 +36,15 @@ self.addEventListener('activate', (event) => {
 // ネット優先・httpのみ対象
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
-
-  // httpまたはhttpsスキーム以外は無視する（キャッシュしない）
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
 
   event.respondWith(
     fetch(event.request).then((networkResponse) => {
+      if (networkResponse.status === 206) {
+        return networkResponse;
+      }
       return caches.open(CACHE_NAME).then((cache) => {
-        // 再度キャッシュする前にURLスキームをチェック
-        if (url.startsWith('http://') || url.startsWith('https://')) {
-          cache.put(event.request, networkResponse.clone());
-        }
+        cache.put(event.request, networkResponse.clone());
         return networkResponse;
       });
     }).catch(() => {
