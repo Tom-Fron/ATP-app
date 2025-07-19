@@ -1,0 +1,12 @@
+{
+  "name": "atp-app",
+  "version": "1.0.0",
+  "main": "obfuscate.js",
+  "scripts": {
+    "build": "node obfuscate.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
