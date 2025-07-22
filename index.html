@@ -512,7 +512,7 @@ if (q.explanation && q.explanation.trim() !== '') {
   if (existingNextBtn) {
     existingNextBtn.remove();
   }
-  const nextBtn = createButton('つぎへ', () => {
+  const nextBtn = createButton('次へ', () => {
     currentIndex++;
     if (currentIndex < questions.length) {
       showQuestion();
