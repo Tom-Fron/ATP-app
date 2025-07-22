@@ -569,6 +569,7 @@ const restartBtn = createButton('もういちど', () => {
     document.querySelectorAll('.sakura').forEach(el => el.remove());
     clearInterval(sakuraInterval);
   }
+  showCategories();
 });
 restartBtn.style.width = '200px';
 container.appendChild(restartBtn);
