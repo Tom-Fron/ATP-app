@@ -33,6 +33,8 @@ self.addEventListener('fetch', (event) => {
   const url = event.request.url;
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
 
+if (event.request.method !== 'GET') return;
+
   event.respondWith(
     fetch(event.request).then((networkResponse) => {
       if (networkResponse.status === 206) {
