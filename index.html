@@ -217,6 +217,26 @@ body.darken-background {
   gtag('js', new Date());
   gtag('config', 'G-DS9KC8SGP0');
 </script>
+<script>
+window.addEventListener('beforeinstallprompt', (e) => {
+  window.deferredPrompt = e;
+  
+  e.userChoice.then(choiceResult => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('ユーザーがPWAをインストールしました');
+      
+      if (typeof gtag === 'function') {
+        gtag('event', 'pwa_install', {
+          event_category: 'engagement',
+          event_label: 'ユーザーがPWAをインストール'
+        });
+      }
+    } else {
+      console.log('ユーザーはPWAのインストールをキャンセルしました');
+    }
+  });
+});
+</script>
 
 </head>
 <body>
