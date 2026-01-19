@@ -1,62 +1,55 @@
-const CACHE_NAME = 'japan-life-cache';
+const CACHE_NAME = 'japan-life-cache-v1';
+
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   './icon.png',
-  './icon-512.png',
+  './icon-512.png'
 ];
 
+// インストール時：基本ファイルのみキャッシュ
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(urlsToCache);
+    })
   );
 });
 
+// アクティベート時：古いキャッシュ削除
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
         cacheNames.map((name) => {
           if (name !== CACHE_NAME) {
             return caches.delete(name);
           }
         })
-      )
-    )
+      );
+    })
   );
-  return self.clients.claim();
+  self.clients.claim();
 });
 
+// フェッチ処理
 self.addEventListener('fetch', (event) => {
- // ★ 利用規約（terms.json）は常にネットワーク優先
+
+  // 利用規約（terms.json）は必ずネットワークから取得
   if (event.request.url.includes('terms.json')) {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
-  const url = event.request.url;
-  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
-
-if (event.request.method !== 'GET') return;
+  // GET 以外は処理しない
+  if (event.request.method !== 'GET') {
+    return;
+  }
 
   event.respondWith(
-    fetch(event.request).then((networkResponse) => {
-      if (networkResponse.status === 206) {
-        return networkResponse;
-      }
-      return caches.open(CACHE_NAME).then((cache) => {
-        cache.put(event.request, networkResponse.clone());
-        return networkResponse;
-      });
-    }).catch(() => {
-      return caches.match(event.request);
+    caches.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request);
     })
   );
 });
