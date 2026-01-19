@@ -30,6 +30,17 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+ // ★ 利用規約（terms.json）は常にネットワーク優先
+  if (event.request.url.includes('terms.json')) {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
   const url = event.request.url;
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
 
