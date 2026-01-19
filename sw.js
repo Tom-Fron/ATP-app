@@ -8,7 +8,6 @@ const urlsToCache = [
   './icon-512.png'
 ];
 
-// インストール時：基本ファイルのみキャッシュ
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -18,7 +17,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// アクティベート時：古いキャッシュ削除
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -34,15 +32,20 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// フェッチ処理
 self.addEventListener('fetch', (event) => {
 
-  // 利用規約（terms.json）は必ずネットワークから取得
-  if (event.request.url.includes('terms.json')) {
+  const url = new URL(event.request.url);
+
+  // ✅ 自分のサイト以外（Google Analytics 等）は無視
+  if (url.origin !== self.location.origin) {
     return;
   }
 
-  // GET 以外は処理しない
+  // 利用規約は常にネットワーク
+  if (url.pathname.endsWith('terms.json')) {
+    return;
+  }
+
   if (event.request.method !== 'GET') {
     return;
   }
