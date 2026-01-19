@@ -1,25 +1,24 @@
-const CACHE_NAME = 'japan-life-cache-v2';
-
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon.png',
-  '/icon-512.png',
+const CACHE_NAME = 'japan-life-cache';
+const urlsToCache = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon.png',
+  './icon-512.png',
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((names) =>
+    caches.keys().then((cacheNames) =>
       Promise.all(
-        names.map((name) => {
+        cacheNames.map((name) => {
           if (name !== CACHE_NAME) {
             return caches.delete(name);
           }
@@ -27,26 +26,37 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
-  self.clients.claim();
+  return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-  const url = event.request.url;
-
-  // terms.json は必ずネットワーク
-  if (url.endsWith('/terms.json')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-
-  // 外部URL（Google Analytics等）はSWで触らない
-  if (!url.startsWith(self.location.origin)) {
+ // ★ 利用規約（terms.json）は常にネットワーク優先
+  if (event.request.url.includes('terms.json')) {
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request);
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
+  const url = event.request.url;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
+
+if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    fetch(event.request).then((networkResponse) => {
+      if (networkResponse.status === 206) {
+        return networkResponse;
+      }
+      return caches.open(CACHE_NAME).then((cache) => {
+        cache.put(event.request, networkResponse.clone());
+        return networkResponse;
+      });
+    }).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
