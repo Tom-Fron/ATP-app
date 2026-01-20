@@ -619,6 +619,7 @@ container.appendChild(restartBtn);
       fetch('terms.json')
         .then(response => response.json())
         .then(data => {
+          console.log('📄 terms.json の中身:', data);
           if (categoryButtons) categoryButtons.style.display = 'none';
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
