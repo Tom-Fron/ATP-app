@@ -2,7 +2,6 @@ const CACHE_NAME = 'japan-life-cache-v3';
 
 const urlsToCache = [
   './',
-  './index.html',
   './manifest.json',
   './icon.png',
   './icon-512.png'
