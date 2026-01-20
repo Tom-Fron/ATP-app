@@ -616,7 +616,7 @@ container.appendChild(restartBtn);
 
   if (readTerms) {
     readTerms.addEventListener('click', () => {
-      fetch('terms.json')
+      fetch('terms.json', { cache: 'no-store' })
         .then(response => response.json())
         .then(data => {
           console.log('📄 terms.json の中身:', data);
