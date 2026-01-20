@@ -1,4 +1,4 @@
-const CACHE_NAME = 'japan-life-cache-v2';
+const CACHE_NAME = 'japan-life-cache-v3';
 
 const urlsToCache = [
   './',
@@ -11,15 +11,15 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) =>
+    caches.keys().then(names =>
       Promise.all(
-        cacheNames.map((name) => {
+        names.map(name => {
           if (name !== CACHE_NAME) {
             return caches.delete(name);
           }
@@ -33,23 +33,21 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
 
-  // terms.json はキャッシュしない（常にネットワーク）
+  // GET 以外は触らない
+  if (request.method !== 'GET') return;
+
+  // http(s) 以外は触らない
+  if (!request.url.startsWith('http')) return;
+
+  // terms.json は常にネットワーク
   if (request.url.includes('terms.json')) {
+    event.respondWith(fetch(request));
     return;
   }
 
-  // GET 以外は無視
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // http(s) 以外は無視
-  if (!request.url.startsWith('http')) {
-    return;
-  }
-
+  // それ以外は cache-first
   event.respondWith(
-    caches.match(request).then((cached) => {
+    caches.match(request).then(cached => {
       return cached || fetch(request);
     })
   );
