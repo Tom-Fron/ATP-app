@@ -626,7 +626,7 @@ container.appendChild(restartBtn);
 
  const formatLine = (line) => {
  const isHeading = /^[0-9]+[.．]/.test(line);
-  const isSubList = /^([0-9]+）)(.+)/.exec(line);
+ const isSubList = /^([0-9]+\))(.+)/.exec(line);
   const isNote = /^(※)(.+)/.exec(line);
 
   if (isSubList) {
