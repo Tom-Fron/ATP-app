@@ -649,7 +649,8 @@ container.appendChild(restartBtn);
   }
 };
 
-          document.getElementById('terms-th').innerHTML = data.th.join('<br>');
+          document.getElementById('terms-th').innerHTML =
+data.th.map(formatLine).join('');
 
           document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
 
