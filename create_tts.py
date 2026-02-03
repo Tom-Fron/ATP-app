@@ -1,9 +1,10 @@
 import pandas as pd
 import os
+base_dir = os.path.dirname(os.path.abspath(__file__))
 from gtts import gTTS
 
 input_file = "quiz_questions.xlsx"
-output_dir = "audio"
+output_dir = os.path.join(base_dir, "tts_audio")
 os.makedirs(output_dir, exist_ok=True)
 
 df = pd.read_excel(input_file)
