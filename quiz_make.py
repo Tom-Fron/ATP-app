@@ -6,9 +6,9 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 input_file = os.path.join(base_dir, "quiz_questions.xlsx")
 template_file = os.path.join(base_dir, "template.html")
-output_file = os.path.join(base_dir, "Netlify", "index.html")
+output_file = os.path.join(base_dir, "index.html")
 audio_folder = os.path.join(base_dir, "tts_audio")
-questions_json_path = os.path.join(base_dir, "Netlify", "questions.json")
+questions_json_path = os.path.join(base_dir, "questions.json")
 
 # Excel読み込み
 df = pd.read_excel(input_file)

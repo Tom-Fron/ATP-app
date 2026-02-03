@@ -263,9 +263,9 @@ body.darken-background {
     overflow-x: hidden;
     word-break: break-word;
   ">
-  <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
-  <hr>
   <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
+  <hr>
+  <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
   <!--「とじる」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
   <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">とじる</button>
@@ -616,17 +616,16 @@ container.appendChild(restartBtn);
 
   if (readTerms) {
     readTerms.addEventListener('click', () => {
-      fetch('terms.json', { cache: 'no-store' })
+      fetch('terms.json')
         .then(response => response.json())
         .then(data => {
-          console.log('📄 terms.json の中身:', data);
           if (categoryButtons) categoryButtons.style.display = 'none';
           readTerms.style.display = 'none';
           document.getElementById('terms-container').style.display = 'block';
 
  const formatLine = (line) => {
  const isHeading = /^[0-9]+[.．]/.test(line);
- const isSubList = /^([0-9]+\))(.+)/.exec(line);
+  const isSubList = /^([0-9]+）)(.+)/.exec(line);
   const isNote = /^(※)(.+)/.exec(line);
 
   if (isSubList) {
@@ -649,11 +648,9 @@ container.appendChild(restartBtn);
   }
 };
 
-          document.getElementById('terms-th').innerHTML =
-data.th.map(formatLine).join('');
+         document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
 
-          document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
-
+          document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
         });
     });
   }
