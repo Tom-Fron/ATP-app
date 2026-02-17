@@ -9,8 +9,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
-  body { font-family: sans-serif; background: #FFEFD5; text-align: center; padding: 10px 5px;   
-position: relative;  }
+  body {
+  font-family: sans-serif;
+  background: #FFEFD5;
+  text-align: center;
+  padding: 10px 5px;
+  position: relative;
+}
  .category-btn {
   padding: 14px 20px;
   font-size: 1.2em;
@@ -70,8 +75,10 @@ body.darken-background {
   margin-bottom: 12px;
   user-select: none;
 }
-  .choice {
-  display: block;
+.choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   margin: 8px auto;
   padding: 14px 16px;
   padding-right: 40px;
@@ -85,12 +92,6 @@ body.darken-background {
   text-align: left;
   word-break: break-word;
   box-sizing: border-box;
-  text-indent: 0;
-}
-.choice {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 }
 .choice .thai {
   margin-top: 4px;
@@ -143,9 +144,7 @@ body.darken-background {
     position: relative;
     padding-bottom: 80px;
   }
-  body {
-    position: relative;
-  }
+
   @keyframes fall {
     0% { transform: translateY(-50px) rotate(0deg); opacity: 0.8; }
     100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
@@ -244,10 +243,9 @@ body.darken-background {
 <div id="start-buttons"></div>
 <div style="text-align:center; margin-top: 10px;">
 <span id="read-terms" style="cursor:pointer; font-size: 0.9em; color: blue; text-decoration: underline;">
-  はじめに読んでください<br>กรุณาอ่านก่อนใช้งาน
+  กรุณาอ่านก่อนใช้งาน<br>はじめに読んでください
 </span>
 </div>
-<div id="category-buttons"></div>
 <div id="terms-container"
   style="
     display: none;
@@ -266,9 +264,9 @@ body.darken-background {
   <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
   <hr>
   <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
-  <!--「とじる」ボタン -->
+  <!--「ปิด」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
-  <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">とじる</button>
+  <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">ปิด</button>
   </div>
 </div>
 <div id="container"></div>
@@ -325,14 +323,21 @@ function showCategories() {
   title.classList.remove('category-title');
   title.style.color = '';
 
-for (const category in allQuestions) {
-  if (!category.trim()) continue;
+const fixedCategories = [
+  "実習生生活編\nหมวดชีวิตผู้ฝึกงาน",
+  "日常生活編\nเรื่องราวชีวิตประจำวัน"
+];
+
+fixedCategories.forEach(category => {
+  if (!allQuestions[category]) return;
+
   const count = allQuestions[category].length;
   const [jp, th] = category.split('\n');
   const btnText = `${jp}（${count}問）\n${th}`;
   const btn = createButton(btnText, () => startQuiz(category));
   container.appendChild(btn);
-}
+});
+
   document.getElementById('read-terms').style.display = 'block';
   document.getElementById('container').innerHTML = '';
 }
@@ -347,7 +352,8 @@ function startQuiz(category) {
   const [jp, th] = category.split('\n');
   const title = document.getElementById('main-title');
   title.innerHTML = `${jp}<br>${th}`; 
-  title.classList.add('category-title');    document.getElementById('start-buttons').style.display = 'none';
+  title.classList.add('category-title');    
+  document.getElementById('start-buttons').style.display = 'block';
   showQuestion();
 }
 
@@ -358,7 +364,6 @@ function showQuestion() {
     audioPlaying.currentTime = 0;
     audioPlaying = null;
   }
-  answered = false;
   const q = questions[currentIndex];
   const container = document.getElementById('container');
   container.innerHTML = '';
@@ -603,7 +608,6 @@ container.appendChild(restartBtn);
 }
 
  document.addEventListener('DOMContentLoaded', () => {
-  showCategories();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then(() => console.log('Service Worker registered'))
@@ -612,7 +616,7 @@ container.appendChild(restartBtn);
 
   const readTerms = document.getElementById('read-terms');
   const backButton = document.getElementById('back-button');
-  const categoryButtons = document.getElementById('category-buttons');
+  const categoryButtons = document.getElementById('start-buttons');
 
   if (readTerms) {
     readTerms.addEventListener('click', () => {
@@ -658,7 +662,7 @@ container.appendChild(restartBtn);
   if (backButton) {
     backButton.addEventListener('click', () => {
       document.getElementById('terms-container').style.display = 'none';
-      document.getElementById('category-buttons').style.display = 'block';
+      document.getElementById('start-buttons').style.display = 'block';
       readTerms.style.display = 'block';
     });
   }
