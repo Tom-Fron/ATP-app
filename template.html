@@ -361,6 +361,7 @@ function startQuiz(category) {
 }
 
 function showQuestion() {
+  document.getElementById('start-buttons').innerHTML = '';
   answered = false;
   if (audioPlaying) {
     audioPlaying.pause();
