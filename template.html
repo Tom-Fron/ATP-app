@@ -356,6 +356,7 @@ function startQuiz(category) {
   const title = document.getElementById('main-title');
   title.innerHTML = `${jp}<br>${th}`; 
   title.classList.add('category-title');    
+  document.getElementById('start-buttons').style.display = 'none';
 
   showQuestion();
 }
