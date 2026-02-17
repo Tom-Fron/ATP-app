@@ -1,4 +1,4 @@
-const CACHE_NAME = 'japan-life-cache-v4';
+const CACHE_NAME = 'japan-life-cache-v5';
 
 const urlsToCache = [
   './manifest.json',
@@ -9,7 +9,8 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
   );
 });
 
@@ -34,15 +35,29 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   if (!request.url.startsWith('http')) return;
 
+  if (request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   event.respondWith(
-    fetch(request)
-      .then(response => {
+    caches.match(request).then(cachedResponse => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(request).then(response => {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
         const responseClone = response.clone();
         caches.open(CACHE_NAME).then(cache => {
           cache.put(request, responseClone);
         });
+
         return response;
-      })
-      .catch(() => caches.match(request))
+      });
+    })
   );
 });
