@@ -346,15 +346,17 @@ function startQuiz(category) {
   document.getElementById('read-terms').style.display = 'none';
   document.getElementById('terms-container').style.display = 'none';
   document.getElementById('start-buttons').style.display = 'none';
+
   currentCategory = category;
   questions = [...allQuestions[category]].sort(() => Math.random() - 0.5);
   currentIndex = 0;
   score = 0;
+
   const [jp, th] = category.split('\n');
   const title = document.getElementById('main-title');
   title.innerHTML = `${jp}<br>${th}`; 
   title.classList.add('category-title');    
-  document.getElementById('start-buttons').style.display = 'block';
+
   showQuestion();
 }
 
