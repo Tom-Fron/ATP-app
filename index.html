@@ -263,9 +263,9 @@ body.darken-background {
     overflow-x: hidden;
     word-break: break-word;
   ">
-  <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
-  <hr>
   <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
+  <hr>
+  <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
   <!--「ปิด」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
   <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">ปิด</button>
@@ -321,7 +321,7 @@ function showCategories() {
   container.innerHTML = '';
   
   const title = document.getElementById('main-title');
-  title.textContent = '日本の生活(仮)';
+  title.textContent = 'ロールプレイ';
   title.classList.remove('category-title');
   title.style.color = '';
 
@@ -648,9 +648,9 @@ container.appendChild(restartBtn);
   }
 };
 
-         document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
+         document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
 
-          document.getElementById('terms-th').innerHTML = data.th.map(formatLine).join('');
+          document.getElementById('terms-ja').innerHTML = data.ja.map(formatLine).join('');
         });
     });
   }
