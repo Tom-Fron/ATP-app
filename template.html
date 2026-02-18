@@ -325,14 +325,25 @@ function showCategories() {
   title.classList.remove('category-title');
   title.style.color = '';
 
-for (const category in allQuestions) {
-  if (!category.trim()) continue;
-  const count = allQuestions[category].length;
-  const [jp, th] = category.split('\n');
-  const btnText = `${jp}（${count}問）\n${th}`;
-  const btn = createButton(btnText, () => startQuiz(category));
-  container.appendChild(btn);
+const keys = Object.keys(allQuestions);
+
+const category1 = keys[0];
+const category2 = keys[1];
+
+if (category1) {
+  const count1 = allQuestions[category1].length;
+  const [jp1, th1] = category1.split('\n');
+  const btn1 = createButton(`${jp1}（${count1}問）\n${th1}`, () => startQuiz(category1));
+  container.appendChild(btn1);
 }
+
+if (category2) {
+  const count2 = allQuestions[category2].length;
+  const [jp2, th2] = category2.split('\n');
+  const btn2 = createButton(`${jp2}（${count2}問）\n${th2}`, () => startQuiz(category2));
+  container.appendChild(btn2);
+}
+
   document.getElementById('read-terms').style.display = 'block';
   document.getElementById('container').innerHTML = '';
 }
