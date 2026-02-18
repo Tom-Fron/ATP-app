@@ -325,14 +325,35 @@ function showCategories() {
   title.classList.remove('category-title');
   title.style.color = '';
 
-for (const category in allQuestions) {
-  if (!category.trim()) continue;
-  const count = allQuestions[category].length;
-  const [jp, th] = category.split('\n');
-  const btnText = `${jp}（${count}問）\n${th}`;
-  const btn = createButton(btnText, () => startQuiz(category));
-  container.appendChild(btn);
+function showCategories() {
+  document.body.classList.remove('darken-background');
+  const container = document.getElementById('start-buttons');
+  container.style.display = 'block';
+  container.innerHTML = '';
+  
+  const title = document.getElementById('main-title');
+  title.textContent = 'ロールプレイ';
+  title.classList.remove('category-title');
+  title.style.color = '';
+
+  const fixedCategories = [
+    "実習生生活編\nหมวดชีวิตผู้ฝึกงาน",
+    "日常生活編\nเรื่องราวชีวิตประจำวัน"
+  ];
+
+  fixedCategories.forEach(category => {
+    if (!allQuestions[category]) return; 
+    const count = allQuestions[category].length;
+    const [jp, th] = category.split('\n');
+    const btnText = `${jp}（${count}問）\n${th}`;
+    const btn = createButton(btnText, () => startQuiz(category));
+    container.appendChild(btn);
+  });
+
+  document.getElementById('read-terms').style.display = 'block';
+  document.getElementById('container').innerHTML = '';
 }
+
   document.getElementById('read-terms').style.display = 'block';
   document.getElementById('container').innerHTML = '';
 }
