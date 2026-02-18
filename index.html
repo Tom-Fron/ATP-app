@@ -263,9 +263,9 @@ body.darken-background {
     overflow-x: hidden;
     word-break: break-word;
   ">
-  <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
-  <hr>
   <div id="terms-ja" style="margin: 0; padding: 0; text-align: left;"></div>
+  <hr>
+  <div id="terms-th" style="margin: 0; padding: 0; text-align: left;"></div>
   <!--「ปิด」ボタン -->
   <div style="text-align: center; margin-top: 30px;">
   <button id="back-button" style="font-size: 1em; padding: 8px 16px; background-color: #f57c00; color: white; border: none; border-radius: 5px; cursor: pointer;">ปิด</button>
@@ -321,39 +321,18 @@ function showCategories() {
   container.innerHTML = '';
   
   const title = document.getElementById('main-title');
-  title.textContent = 'ロールプレイ';
+  title.textContent = '日本の生活(仮)';
   title.classList.remove('category-title');
   title.style.color = '';
 
-function showCategories() {
-  document.body.classList.remove('darken-background');
-  const container = document.getElementById('start-buttons');
-  container.style.display = 'block';
-  container.innerHTML = '';
-  
-  const title = document.getElementById('main-title');
-  title.textContent = 'ロールプレイ';
-  title.classList.remove('category-title');
-  title.style.color = '';
-
-  const fixedCategories = [
-    "実習生生活編\nหมวดชีวิตผู้ฝึกงาน",
-    "日常生活編\nเรื่องราวชีวิตประจำวัน"
-  ];
-
-  fixedCategories.forEach(category => {
-    if (!allQuestions[category]) return; 
-    const count = allQuestions[category].length;
-    const [jp, th] = category.split('\n');
-    const btnText = `${jp}（${count}問）\n${th}`;
-    const btn = createButton(btnText, () => startQuiz(category));
-    container.appendChild(btn);
-  });
-
-  document.getElementById('read-terms').style.display = 'block';
-  document.getElementById('container').innerHTML = '';
+for (const category in allQuestions) {
+  if (!category.trim()) continue;
+  const count = allQuestions[category].length;
+  const [jp, th] = category.split('\n');
+  const btnText = `${jp}（${count}問）\n${th}`;
+  const btn = createButton(btnText, () => startQuiz(category));
+  container.appendChild(btn);
 }
-
   document.getElementById('read-terms').style.display = 'block';
   document.getElementById('container').innerHTML = '';
 }
