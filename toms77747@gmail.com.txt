@@ -4,7 +4,7 @@ Netlify,GitHub,Googleすべて以下のメアドとPASS
 
 名前：Tom Fron
 メアド：toms77747@gmail.com
-PASS：pokadasagon2525
+PASS：A7m#Q2x!R9t$
 
 アップロードが必要なファイル3点
 index.html
