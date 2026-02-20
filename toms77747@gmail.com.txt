@@ -1,25 +1,7 @@
-Netlify設定
-
-Netlify,GitHub,Googleすべて以下のメアドとPASS
-
 名前：Tom Fron
 メアド：toms77747@gmail.com
 PASS：A7m#Q2x!R9t$
 
-アップロードが必要なファイル3点
-index.html
-manifest.json
-sw
-
-更新手順
-エクセルに問題文、選択肢、解説、音声読み上げ文を追加し保存
-create_tts.pyをcmdで実行し、音声ファイルを作成する
-quiz_make.pyをcmdで実行し、index.htmlファイルを更新する
-py¥audioフォルダのmp3をpy¥netlify\audioにコピーする
-index.html、questions.jsonをNetlifyにアップロードする
-　→画面左のTomsを選択し、画面中央下のアップロードスペースにフォルダごとアップロードする
-
-URLをLINEで送る
 
 ☆注意事項
 URLをクリックするとオンラインなら使用可能
@@ -29,12 +11,3 @@ URLをクリックするとオンラインなら使用可能
 
 Git torkun
 90日設定にしている、期限が切れたら認証エラーができるのでその時に、新しいトークンを再生成し、再度ログインする
-
-
-
-以下、BASE64埋め込み方式の方法（別ファイル方式に変更したので使わない）
-エクセルに問題文、選択肢、解説、音声読み上げ文を追加し保存
-create_tts.pyをcmdで実行し、音声ファイルを作成する
-quiz_make.pyをcmdで実行し、htmlファイルを更新する
-上記のアップロードが必要なファイル3点をNetlifyにアップロードする
-　→画面左のTomsを選択し、画面中央下のアップロードスペースにファイル3点をアップロードする
