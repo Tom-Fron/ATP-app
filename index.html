@@ -209,15 +209,6 @@ body.darken-background {
   }
 </style>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DS9KC8SGP0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DS9KC8SGP0');
-</script>
-
 <script>
   window.addEventListener('beforeinstallprompt', (e) => {
     window.deferredPrompt = e;
@@ -225,13 +216,6 @@ body.darken-background {
 
   window.addEventListener('appinstalled', (event) => {
     console.log('PWAがインストールされました');
-
-    if (typeof gtag === 'function') {
-      gtag('event', 'pwa_install', {
-        event_category: 'engagement',
-        event_label: 'PWAがインストールされました'
-      });
-    }
   });
 </script>
 
