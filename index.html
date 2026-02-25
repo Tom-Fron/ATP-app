@@ -52,13 +52,7 @@ position: relative;  }
   margin: 0;
   white-space: normal;
 }
-body.darken-background {
-    background-color: #2b2b2b !important;
-    background-image:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 5px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 5px);
-  color: white !important;
-}
+
   .category-title {
   background-color: #00ff00;
   color: black;
@@ -146,20 +140,7 @@ body.darken-background {
   body {
     position: relative;
   }
-  @keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg); opacity: 0.8; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-  }
-  .sakura {
-    position: fixed;
-    top: -80px;
-    font-size: 24px;
-    pointer-events: none;
-    color: pink;
-    animation: fall linear 12s;
-    z-index: 9999;
-    user-select: none;
-  }
+
   #header {
     display: flex !important;
     flex-direction: column !important;
@@ -299,7 +280,6 @@ function createButton(text, onClick) {
 }
 
 function showCategories() {
-  document.body.classList.remove('darken-background');
   const container = document.getElementById('start-buttons');
   container.style.display = 'block';
   container.innerHTML = '';
@@ -549,8 +529,6 @@ if (q.explanation && q.explanation.trim() !== '') {
 }
 
 function showResult() {
-  let sakuraInterval; 
-  document.body.classList.add('darken-background');
   const container = document.getElementById('container');
   container.innerHTML = '';
 
@@ -563,34 +541,7 @@ resultText.style.marginBottom = '20px';
 resultText.textContent = `正答数 ${score} / ${questions.length}問（${percent}%）`;
 container.appendChild(resultText);
 
-if (percent < 50) {
-  document.body.classList.add('darken-background');
-} else {
-  document.body.classList.remove('darken-background');
-}
-
-if (percent >= 90) {
-  const createSakura = () => {
-    const sakura = document.createElement('div');
-    sakura.className = 'sakura';
-    sakura.textContent = '🌸';
-    sakura.style.left = Math.random() * 100 + 'vw';
-    sakura.style.animationDuration = (8 + Math.random() * 8) + 's';
-    sakura.style.fontSize = (16 + Math.random() * 24) + 'px';
-    document.body.appendChild(sakura);
-  };
-
-  setTimeout(() => {
-    createSakura();
-    sakuraInterval = setInterval(createSakura, 800);
-  }, 0);
-}
-
 const restartBtn = createButton('もういちど', () => {
-  if (percent >= 90) {
-    document.querySelectorAll('.sakura').forEach(el => el.remove());
-    clearInterval(sakuraInterval);
-  }
   showCategories();
 });
 restartBtn.style.width = '200px';
