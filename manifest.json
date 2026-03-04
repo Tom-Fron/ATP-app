@@ -1,6 +1,6 @@
 {
   "name": "ロールプレイ",
-  "short_name": "AJSL Play",
+  "short_name": "AJLS Play",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
